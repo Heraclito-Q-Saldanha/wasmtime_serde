@@ -8,7 +8,7 @@ license = "Unlicense OR MIT"
 crate-type = ['cdylib']
 
 [dependencies]
-wasmtime_serde_guest = {path = "../../../crates/guest"}
+wasmtime_serde_guest = "0.1.0"
 serde = {version = "1.0.152", features = ["derive"]}
 
 [profile.release]

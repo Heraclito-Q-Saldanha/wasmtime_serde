@@ -5,7 +5,7 @@ edition = "2021"
 license = "Unlicense OR MIT"
 
 [dependencies]
-wasmtime_serde_host = {path = "../../../crates/host"}
+wasmtime_serde_host = "0.1.0"
 serde = {version = "1.0.152", features = ["derive"]}
 
 [profile.release]
