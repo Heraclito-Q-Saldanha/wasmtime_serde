@@ -1,0 +1,15 @@
+[package]
+name = "wasmtime_serde_guest_macro"
+version = "0.1.0"
+edition = "2021"
+license = "Unlicense OR MIT"
+authors = ["Heráclito <heraclitoqsaldanha@gmail.com>"]
+description = "Simple library for serializing complex types to the wasmtime runtime using serde"
+repository = "https://github.com/Heraclito-Q-Saldanha/wasmtime_serde"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = {version = "1.0.107", features = ["full"] }
+quote = "1.0.23"

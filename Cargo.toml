@@ -1,0 +1,17 @@
+[workspace]
+members = [
+    "crates/guest",
+    "crates/guest_macro",
+    "crates/host",
+    "crates/host_macro"
+]
+exclude = [
+	"docs/examples/guest",
+    "docs/examples/host"
+]
+
+[profile.release]
+opt-level = "z"
+codegen-units = 1
+lto = true
+strip = true
