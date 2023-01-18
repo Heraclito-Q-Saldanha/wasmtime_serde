@@ -10,14 +10,13 @@ pub struct Func<P: serde::ser::Serialize, R: serde::de::DeserializeOwned> {
 
 impl<P: serde::ser::Serialize, R: serde::de::DeserializeOwned> Func<P, R> {
 	pub fn call(&self, value: &P) -> R {
-		let RuntimeCaller { memory, alloc_fn, dealloc_fn } = self.store.borrow().data().unwrap();
+		let RuntimeCaller { memory, alloc_fn, .. } = self.store.borrow().data().unwrap();
 		let buffer = serialize(value).unwrap();
 		let len = buffer.len() as _;
 		let ptr = alloc_fn.call(&mut *self.store.borrow_mut(), len).unwrap();
 		memory.write(&mut *self.store.borrow_mut(), ptr as _, &buffer).unwrap();
-		let rptr = self.wasm_fn.call(&mut *self.store.borrow_mut(), into_bitwise(ptr, len)).unwrap();
-		dealloc_fn.call(&mut *self.store.borrow_mut(), into_bitwise(ptr, len)).unwrap();
-		let (ptr, len) = from_bitwise(rptr);
+		let ptr = self.wasm_fn.call(&mut *self.store.borrow_mut(), into_bitwise(ptr, len)).unwrap();
+		let (ptr, len) = from_bitwise(ptr);
 		let mut buffer = vec![0u8; len as _];
 		memory.read(& *self.store.borrow(), ptr as _, &mut buffer).unwrap();
 		deserialize(&buffer).unwrap()
