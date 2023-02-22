@@ -1,5 +1,11 @@
 # examples
 
+add wasm target
+
+```
+rustup target add wasm32-unknown-unknown
+```
+
 compile guest
 ```
 (cd guest; cargo build)
