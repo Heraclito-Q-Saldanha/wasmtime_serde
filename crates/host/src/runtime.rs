@@ -14,9 +14,12 @@ pub(crate) struct RuntimeCaller {
 }
 
 impl Runtime {
-	pub fn load_from_file<P: AsRef<std::path::Path>>(path: P, imports: &'static [(&'static str, fn(&[u8]) -> Vec<u8>)]) -> anyhow::Result<Self> {
+	pub fn from_file(file: impl AsRef<std::path::Path>, imports: &'static [(&'static str, fn(&[u8]) -> Vec<u8>)]) -> anyhow::Result<Self> {
+		Self::new(&std::fs::read(&file)?, imports)
+	}
+	pub fn new(bytes: impl AsRef<[u8]>, imports: &'static [(&'static str, fn(&[u8]) -> Vec<u8>)]) -> anyhow::Result<Self> {
 		let engine = wasmtime::Engine::default();
-		let module = wasmtime::Module::from_file(&engine, path)?;
+		let module = wasmtime::Module::new(&engine, bytes)?;
 		let mut store = wasmtime::Store::new(&engine, None);
 		let mut linker = wasmtime::Linker::new(&engine);
 		for (name, callback) in imports {
@@ -37,8 +40,12 @@ impl Runtime {
 		let alloc_fn = instance.get_typed_func(&mut store, "alloc")?;
 		let dealloc_fn = instance.get_typed_func(&mut store, "dealloc")?;
 		*store.data_mut() = Some(RuntimeCaller { memory, alloc_fn, dealloc_fn });
-		Ok(Self { instance, store: Rc::new(RefCell::new(store)) })
+		Ok(Self {
+			instance,
+			store: Rc::new(RefCell::new(store)),
+		})
 	}
+
 	pub fn get_func<P: serde::ser::Serialize, R: serde::de::DeserializeOwned>(&self, name: &str) -> anyhow::Result<Func<P, R>> {
 		let wasm_fn = self.instance.get_typed_func::<u64, u64>(&mut *self.store.borrow_mut(), &format!("_wasm_guest_{name}"))?;
 		Ok(Func {

@@ -19,7 +19,7 @@ fn get_human() -> Human {
 
 fn main() {
 	let host_fns = host_funcs![print, get_human];
-	let runtime = Runtime::load_from_file("../guest/target/wasm32-unknown-unknown/debug/guest.wasm", host_fns).unwrap();
+	let runtime = Runtime::from_file("../guest/target/wasm32-unknown-unknown/debug/guest.wasm", host_fns).unwrap();
 	let add_fn = runtime.get_func::<(i32, i32), i32>("add").unwrap();
 	let result = add_fn.call(&(1, 2));
 	println!("{result}");
