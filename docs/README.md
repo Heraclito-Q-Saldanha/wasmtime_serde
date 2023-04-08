@@ -17,8 +17,8 @@ use wasmtime_serde_host::*;
 
 fn main(){
     let runtime = Runtime::load_from_file("file.wasm", &[]).unwrap();
-	let add_fn = runtime.get_func::<(i32, i32), i32>("add").unwrap();
-	let result = add_fn.call(&(1, 2));
+    let add_fn = runtime.get_func::<(i32, i32), i32>("add").unwrap();
+    let result = add_fn.call(&(1, 2));
     println!("{result}");
 }
 
