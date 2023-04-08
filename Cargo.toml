@@ -12,6 +12,5 @@ exclude = [
 
 [profile.release]
 opt-level = "z"
-codegen-units = 1
 lto = true
 strip = true

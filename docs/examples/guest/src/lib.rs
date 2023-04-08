@@ -2,9 +2,9 @@ use serde::{Deserialize, Serialize};
 use wasmtime_serde_guest::*;
 
 #[derive(Debug, Deserialize, Serialize)]
-struct Human{
+struct Human {
 	name: String,
-	age: u8
+	age: u8,
 }
 
 #[export_fn]

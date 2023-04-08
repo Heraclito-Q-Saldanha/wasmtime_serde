@@ -5,11 +5,10 @@ edition = "2021"
 license = "Unlicense OR MIT"
 
 [dependencies]
-wasmtime_serde_host = "0.1.0"
-serde = {version = "1.0.152", features = ["derive"]}
+wasmtime_serde_host = {path = "../../../crates/host"}
+serde = {version = "1.0.159", features = ["derive"]}
 
 [profile.release]
 opt-level = "z"
-codegen-units = 1
 lto = true
 strip = true
