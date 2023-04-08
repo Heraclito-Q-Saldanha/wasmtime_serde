@@ -24,7 +24,6 @@ fn main(){
 
 ```
 
-
 See the [example code](examples)
 
 Dual-licensed under [MIT](../LICENSE-MIT) or the [UNLICENSE](../UNLICENSE).

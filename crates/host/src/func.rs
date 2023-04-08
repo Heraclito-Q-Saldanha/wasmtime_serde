@@ -9,9 +9,11 @@ pub struct Func<P: serde::ser::Serialize, R: serde::de::DeserializeOwned> {
 }
 
 impl<P: serde::ser::Serialize, R: serde::de::DeserializeOwned> Func<P, R> {
+	/// a more ergonomic version of the check_call function, which panic if it fails, using an analogy to an array, if checked_call were array.get(i), call would be array\[i\]
 	pub fn call(&self, value: &P) -> R {
 		self.checked_call(value).unwrap()
 	}
+	/// fail if the function in the guest panic and does not return
 	pub fn checked_call(&self, value: &P) -> anyhow::Result<R> {
 		let RuntimeCaller { memory, alloc_fn, .. } = self.store.borrow().data().unwrap();
 		let buffer = serialize(value)?;
