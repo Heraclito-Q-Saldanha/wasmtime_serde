@@ -6,13 +6,13 @@ use syn::{parse_macro_input, ItemFn};
 
 #[proc_macro_attribute]
 pub fn export_fn(_attr: TokenStream, item: TokenStream) -> TokenStream {
-	let ast = parse_macro_input!(item as ItemFn);
-	let name = &ast.sig.ident;
+	let data = parse_macro_input!(item as ItemFn);
+	let name = &data.sig.ident;
 	let extern_name = format_ident!("_wasm_guest_{}", name);
 	let gen = {
 		let mut argument_types = quote!();
 		let mut call = quote!();
-		for (i, arg) in ast.sig.inputs.iter().enumerate() {
+		for (i, arg) in data.sig.inputs.iter().enumerate() {
 			let i = syn::Index::from(i);
 			call = quote!(#call message.#i,);
 			if let syn::FnArg::Typed(t) = arg {
@@ -31,7 +31,7 @@ pub fn export_fn(_attr: TokenStream, item: TokenStream) -> TokenStream {
 			}
 		}
 	};
-	quote!(#gen #ast).into()
+	quote!(#gen #data).into()
 }
 
 struct FnImports {

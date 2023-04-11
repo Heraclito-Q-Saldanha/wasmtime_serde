@@ -3,6 +3,7 @@
 pub use bincode::{deserialize, serialize};
 pub use wasmtime_serde_guest_macro::*;
 
+#[inline]
 #[no_mangle]
 pub extern "C" fn alloc(len: u32) -> *mut u8 {
 	let mut buf = Vec::with_capacity(len as _);
@@ -11,6 +12,7 @@ pub extern "C" fn alloc(len: u32) -> *mut u8 {
 	return ptr;
 }
 
+#[inline]
 #[no_mangle]
 pub unsafe extern "C" fn dealloc(value: u64) {
 	let (ptr, len) = from_bitwise(value);
@@ -34,10 +36,12 @@ pub unsafe fn read_msg<T: serde::de::DeserializeOwned>(value: u64) -> T {
 	bincode::deserialize(&buffer).unwrap()
 }
 
+#[inline(always)]
 fn from_bitwise(value: u64) -> (u32, u32) {
 	((value << 32 >> 32) as u32, (value >> 32) as u32)
 }
 
+#[inline(always)]
 fn into_bitwise(a: u32, b: u32) -> u64 {
 	(a as u64) | (b as u64) << 32
 }
