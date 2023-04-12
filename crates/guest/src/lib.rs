@@ -37,11 +37,24 @@ pub unsafe fn read_msg<T: serde::de::DeserializeOwned>(value: u64) -> T {
 }
 
 #[inline(always)]
-fn from_bitwise(value: u64) -> (u32, u32) {
+const fn from_bitwise(value: u64) -> (u32, u32) {
 	((value << 32 >> 32) as u32, (value >> 32) as u32)
 }
 
 #[inline(always)]
-fn into_bitwise(a: u32, b: u32) -> u64 {
+const fn into_bitwise(a: u32, b: u32) -> u64 {
 	(a as u64) | (b as u64) << 32
+}
+
+#[cfg(test)]
+mod test {
+	use crate::*;
+
+	#[test]
+	fn bitwise() {
+		const DATA: (u32, u32) = (10, 20);
+		const INTO: u64 = into_bitwise(DATA.0, DATA.1);
+		const FROM: (u32, u32) = from_bitwise(INTO);
+		assert_eq!(DATA, FROM)
+	}
 }
