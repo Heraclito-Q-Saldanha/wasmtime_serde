@@ -1,32 +1,32 @@
-use wasmtime_serde_host::*;
+#[cfg(test)]
+mod test {
+	use wasmtime_serde_host::*;
+	const GUEST_DATA: &[u8] = include_bytes!("guest.wasm");
 
-#[test]
-fn load_runtime() {
-	const DATA: &[u8] = include_bytes!("guest.wasm");
-	assert!(Runtime::new(DATA, &[]).is_ok())
-}
+	#[test]
+	fn load_runtime() {
+		assert!(Runtime::new(GUEST_DATA, &[]).is_ok())
+	}
 
-#[test]
-fn get_func() {
-	const DATA: &[u8] = include_bytes!("guest.wasm");
-	let runtime = Runtime::new(DATA, &[]).unwrap();
-	assert!(runtime.get_func::<(i32, i32), i32>("add").is_ok())
-}
+	#[test]
+	fn get_func() {
+		let runtime = Runtime::new(GUEST_DATA, &[]).unwrap();
+		assert!(runtime.get_func::<(i32, i32), i32>("add").is_ok())
+	}
 
-#[test]
-fn call() {
-	const DATA: &[u8] = include_bytes!("guest.wasm");
-	let runtime = Runtime::new(DATA, &[]).unwrap();
-	let add_fn = runtime.get_func::<(i32, i32), i32>("add").unwrap();
-	let result = add_fn.call(&(10, 10));
-	assert_eq!(result, 20)
-}
+	#[test]
+	fn call() {
+		let runtime = Runtime::new(GUEST_DATA, &[]).unwrap();
+		let add_fn = runtime.get_func::<(i32, i32), i32>("add").unwrap();
+		let result = add_fn.call(&(10, 10));
+		assert_eq!(result, 20)
+	}
 
-#[test]
-fn checked_call() {
-	const DATA: &[u8] = include_bytes!("guest.wasm");
-	let runtime = Runtime::new(DATA, &[]).unwrap();
-	let panic_fn = runtime.get_func::<(), ()>("panic").unwrap();
-	let result = panic_fn.checked_call(&());
-	assert!(result.is_err())
+	#[test]
+	fn checked_call() {
+		let runtime = Runtime::new(GUEST_DATA, &[]).unwrap();
+		let panic_fn = runtime.get_func::<(), ()>("panic").unwrap();
+		let result = panic_fn.checked_call(&());
+		assert!(result.is_err())
+	}
 }
