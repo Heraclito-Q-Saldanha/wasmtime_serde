@@ -11,6 +11,6 @@ repository = "https://github.com/Heraclito-Q-Saldanha/wasmtime_serde"
 proc-macro = true
 
 [dependencies]
-syn = {version = "1.0.107", features = ["full"] }
+syn = {version = "2.0.15", features = ["full"] }
 proc-macro2 = "1.0.56"
 quote = "1.0.26"

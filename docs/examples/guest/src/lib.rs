@@ -10,11 +10,11 @@ struct Human {
 #[export_fn]
 fn add(a: i32, b: i32) -> i32 {
 	let human = get_human();
-	print(format!("{human:?}"));
+	println(format!("{human:?}"));
 	a + b
 }
 
 import_fn!(
-	fn print(msg: String);
 	fn get_human() -> Human;
+	fn println(msg: String);
 );
