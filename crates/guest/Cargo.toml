@@ -8,6 +8,6 @@ description = "Simple library for serializing complex types to the wasmtime runt
 repository = "https://github.com/Heraclito-Q-Saldanha/wasmtime_serde"
 
 [dependencies]
-serde = "1.0.160"
+serde = "1.0.163"
 bincode = "1.3.3"
 wasmtime_serde_guest_macro = "0.1.0"
